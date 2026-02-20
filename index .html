@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Arika 💜</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Mazeed Light aur Soft Colors */
+            --bg-color: #fffafb; 
+            --main-pink: #ffb6d5;
+            --accent-pink: #ff85b2;
+            --dark-text: #6d465b;
+            --bubble-me: #fce4ec;
+            --bubble-her: #f3e5f5;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .container {
+            width: 100%; max-width: 400px;
+            height: 100vh; position: relative;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .screen {
+            position: absolute; width: 90%;
+            display: flex; flex-direction: column;
+            align-items: center; text-align: center;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .hidden { display: none; opacity: 0; transform: translateY(15px); }
+
+        /* --- CHAT SCREEN --- */
+        .chat-box { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .bubble { padding: 12px 18px; border-radius: 25px; font-size: 14px; color: var(--dark-text); animation: pop 0.4s ease forwards; opacity: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .me { background: var(--bubble-me); align-self: flex-end; border-bottom-right-radius: 4px; }
+        .her { background: var(--bubble-her); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- SCANNING --- */
+        .circle-loader {
+            width: 140px; height: 140px; border: 4px solid #fff;
+            border-top: 4px solid var(--main-pink); border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 15px rgba(255,182,213,0.2);
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- REPORT (UNLIMITED LOGO) --- */
+        .report-card {
+            background: white; border-radius: 30px; padding: 30px;
+            box-shadow: 0 10px 40px rgba(255,182,213,0.15); width: 100%;
+            border: 1px solid #fff;
+        }
+        .unlimited-logo { font-size: 50px; color: var(--accent-pink); line-height: 1; margin: 10px 0; }
+        .report-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #fdf2f5; font-size: 13px; }
+        .pink-val { color: var(--accent-pink); font-weight: 600; }
+
+        /* --- CARDS --- */
+        .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 20px; }
+        .flip-card { 
+            height: 120px; background: white; border-radius: 20px; 
+            display: flex; align-items: center; justify-content: center; 
+            padding: 12px; font-size: 12px; font-weight: 600; color: var(--dark-text);
+            cursor: pointer; border: 1px solid #fff0f5; transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .flip-card:active { transform: scale(0.95); background: #fffcfd; }
+
+        .btn {
+            background: var(--accent-pink); color: white; border: none;
+            padding: 12px 40px; border-radius: 30px; font-weight: 600;
+            cursor: pointer; margin-top: 25px; box-shadow: 0 5px 20px rgba(255,133,178,0.2);
+        }
+
+        .flower { position: absolute; top: -20px; pointer-events: none; animation: fall linear forwards; z-index: 10; opacity: 0.5; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="screen" id="s0">
+        <div class="chat-box">
+            <div class="bubble me" style="animation-delay: 0.2s;">I made something for you💗</div>
+            <div class="bubble her" style="animation-delay: 1.2s;">For me??👀</div>
+            <div class="bubble me" style="animation-delay: 2.2s;">Only for you🥰</div>
+        </div>
+        <button class="btn" style="width: 100%; margin-top: 40px; opacity: 0; animation: pop 0.5s ease 2.8s forwards;" onclick="showNext(1)">Tap to see... ✨</button>
+    </div>
+
+    <div class="screen hidden" id="s1">
+        <h2 style="font-weight: 300; color: var(--dark-text);">Just for you</h2>
+        <div style="font-size: 70px; cursor: pointer; animation: pulse 2s infinite;" onclick="runScan()">❤️</div>
+        <p style="opacity: 0.4; font-size: 13px; margin-top: 10px;">Tap to open</p>
+    </div>
+
+    <div class="screen hidden" id="s2">
+        <div class="circle-loader">
+            <div style="transform: rotate(-360deg); font-size: 35px; animation: spin 1.5s linear infinite reverse;">❤️</div>
+        </div>
+        <h3 id="status" style="margin-top: 25px; font-weight: 400; color: var(--dark-text); font-size: 15px;">Scanning...</h3>
+    </div>
+
+    <div class="screen hidden" id="s3">
+        <div class="report-card">
+            <h4 style="margin: 0; font-size: 12px; opacity: 0.5; letter-spacing: 1px;">OFFICIAL REPORT</h4>
+            <div class="unlimited-logo">∞</div>
+            <h2 style="margin: 0 0 15px 0; color: var(--dark-text); font-size: 20px;">UNLIMITED LOVELY</h2>
+            <div class="report-line"><span>ITEM</span> <span class="pink-val">ARIKA UBAID</span></div>
+            <div class="report-line"><span>CUTENESS</span> <span class="pink-val">UNLIMITED</span></div>
+            <div class="report-line"><span>SWEETNESS</span> <span class="pink-val">OVERLOAD</span></div>
+            <div class="report-line"><span>VIBE</span> <span class="pink-val">PERFECT</span></div>
+        </div>
+        <button class="btn" onclick="showNext(4)">Continue →</button>
+    </div>
+
+    <div class="screen hidden" id="s4">
+        <p style="font-size: 13px; margin-bottom: 15px; color: var(--dark-text);">Tap each card, Princess 🎀</p>
+        <div class="cards-grid">
+            <div class="flip-card" onclick="this.innerHTML='Aap ubaid ki Jaan Hain❤️'">Tap Me 🎁</div>
+            <div class="flip-card" onclick="this.innerHTML='Aap sab se sab se piyaari Hain💗'">Tap Me 🎁</div>
+            <div class="flip-card" onclick="this.innerHTML='Aap Mera sab Kuch hain💓'">Tap Me 🎁</div>
+            <div class="flip-card" onclick="this.innerHTML='I can\'t live without you💝'">Tap Me 🎁</div>
+        </div>
+        <button class="btn" onclick="showNext(5)">One last thing</button>
+    </div>
+
+    <div class="screen hidden" id="s5">
+        <div style="font-size: 80px;">🐱❤️</div>
+        <h1 style="font-family: 'Dancing Script'; font-size: 40px; color: var(--accent-pink); margin: 10px 0;">You're the best!</h1>
+        <p style="color: var(--dark-text); font-size: 14px; font-weight: 600;">I Love You, Arika ♾️</p>
+    </div>
+
+</div>
+
+<script>
+    function showNext(n) {
+        document.querySelectorAll('.screen').forEach(s => {
+            s.style.opacity = '0';
+            setTimeout(() => s.classList.add('hidden'), 500);
+        });
+        setTimeout(() => {
+            const next = document.getElementById('s' + n);
+            next.classList.remove('hidden');
+            setTimeout(() => next.style.opacity = '1', 50);
+        }, 600);
+    }
+
+    function runScan() {
+        showNext(2);
+        const txts = ["Measuring cuteness...", "Detecting sweetness...", "Almost done..."];
+        let i = 0;
+        let timer = setInterval(() => {
+            if(i < txts.length) {
+                document.getElementById('status').innerText = txts[i++];
+            } else {
+                clearInterval(timer);
+                setTimeout(() => showNext(3), 800);
+            }
+        }, 1500);
+    }
+
+    setInterval(() => {
+        const f = document.createElement("div");
+        f.className = "flower";
+        f.innerHTML = ["🌸", "🌷", "✨", "🎀"][Math.floor(Math.random()*4)];
+        f.style.left = Math.random() * 100 + "vw";
+        f.style.fontSize = (Math.random() * 8 + 12) + "px";
+        f.style.animationDuration = (Math.random() * 3 + 5) + "s";
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 6000);
+    }, 700);
+</script>
+
+<style>
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+</style>
+
+</body>
+</html>
